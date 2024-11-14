@@ -6,5 +6,5 @@ import "context"
 
 //counterfeiter:generate . API
 type API interface {
-	GetPermissions(ctx context.Context, folderID string) (Permissions, error)
+	GetPermissions(ctx context.Context, folderID string, recursive bool) (Permissions, error)
 }
