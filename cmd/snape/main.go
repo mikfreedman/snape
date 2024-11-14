@@ -21,12 +21,16 @@ import (
 )
 
 var cli struct {
+	command.Context
 	Permission struct {
 		List command.PermissionList `cmd:"" help:"List permisisons for files in a folder"`
 	} `cmd:""`
+	OutputFilename string `optional:"" default:"" name:"output-filename" help:"output to a file"`
 }
 
 func main() {
+	var w io.Writer
+
 	log.SetFlags(log.Lshortfile)
 	ctx := kong.Parse(&cli, kong.UsageOnError(), kong.Name("snape"))
 
@@ -35,8 +39,20 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var w io.Writer = os.Stdout
+	if len(cli.OutputFilename) > 0 {
+		file, err := os.Create(cli.OutputFilename)
+		if err != nil {
+			fmt.Println("Error opening file:", err)
+			return
+		}
 
+		w = file
+		defer file.Close()
+	} else {
+		w = os.Stdout
+	}
+
+	ctx.Bind(cli.Context)
 	ctx.BindTo(api, (*snape.API)(nil))
 	ctx.BindTo(w, (*io.Writer)(nil))
 	err = ctx.Run()

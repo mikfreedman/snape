@@ -43,7 +43,7 @@ func (a *API) eachFile(folderID string, recursive bool, action func(*drive.File)
 	}
 }
 
-func (a *API) GetPermissions(ctx context.Context, folderID string, recursive bool) (snape.Permissions, error) {
+func (a *API) GetPermissions(ctx context.Context, folderID string, recursive bool, debug bool) (snape.Permissions, error) {
 	var permissions snape.Permissions
 
 	a.eachFile(folderID, recursive, func(file *drive.File) {
@@ -67,6 +67,10 @@ func (a *API) GetPermissions(ctx context.Context, folderID string, recursive boo
 			}
 
 			for _, permission := range pl.Permissions {
+				if debug {
+					fmt.Printf("retrieved permission %s for file %s for user %s\n", permission.Id, file.Id, permission.EmailAddress)
+				}
+
 				permissions = append(permissions, snape.Permission{ID: file.Id, Filename: file.Name, EmailAddress: permission.EmailAddress, Role: permission.Role, FileID: permission.Id})
 			}
 
