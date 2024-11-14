@@ -4,7 +4,7 @@ Get Permissions
 
 ## Installing
 
-Snape is written in Go. You can install Snape by running: `go install github.com/mikfreedman/snape/cmd/gabby@latest`.
+Snape is written in Go. You can install Snape by running: `go install github.com/mikfreedman/snape/cmd/snape@latest`.
 
 ## Usage
 
