@@ -21,7 +21,6 @@ import (
 )
 
 var cli struct {
-	command.Context
 	Permission struct {
 		List command.PermissionList `cmd:"" help:"List permisisons for files in a folder"`
 	} `cmd:""`
@@ -38,7 +37,6 @@ func main() {
 
 	var w io.Writer = os.Stdout
 
-	ctx.Bind(cli.Context)
 	ctx.BindTo(api, (*snape.API)(nil))
 	ctx.BindTo(w, (*io.Writer)(nil))
 	err = ctx.Run()

@@ -14,7 +14,7 @@ type PermissionList struct {
 	Recursive bool   `name:"recursive" optional:"" default:"true" help:"Recursively evaluate folders"`
 }
 
-func (p *PermissionList) Run(ctx Context, api snape.API, w io.Writer) error {
+func (p *PermissionList) Run(api snape.API, w io.Writer) error {
 
 	permissionList, err := api.GetPermissions(context.Background(), p.FolderID, p.Recursive)
 
