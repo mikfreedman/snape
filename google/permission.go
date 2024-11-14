@@ -9,6 +9,8 @@ import (
 	"google.golang.org/api/drive/v3"
 )
 
+const FOLDER_MIME_TYPE = "application/vnd.google-apps.folder"
+
 func (a *API) eachFile(folderID string, recursive bool, action func(*drive.File)) {
 	query := fmt.Sprintf("'%s' in parents", folderID)
 	pageToken := ""
@@ -25,6 +27,10 @@ func (a *API) eachFile(folderID string, recursive bool, action func(*drive.File)
 		}
 
 		for _, file := range r.Files {
+			if recursive && file.MimeType == FOLDER_MIME_TYPE {
+				a.eachFile(file.Id, recursive, action)
+			}
+
 			action(file)
 		}
 
